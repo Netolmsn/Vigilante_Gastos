@@ -1,93 +1,120 @@
 # 🕵️ Vigilante de Gastos
 
-**Vigilante de Gastos** é um sistema de monitoramento financeiro inteligente que identifica **anomalias em despesas pessoais ou corporativas** em tempo real.  
-Ele combina **um backend em FastAPI**, **um dashboard em Streamlit** e **scripts de simulação de eventos**, oferecendo uma visão completa do comportamento financeiro.
+Um sistema inteligente de **monitoramento de despesas em tempo real**, com **detecção de anomalias**, **painel interativo** e **envio de eventos**, desenvolvido com **FastAPI**, **Streamlit** e **Machine Learning**.
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Visão Geral
 
-- 📊 **Dashboard interativo (Streamlit)**
+O **Vigilante de Gastos** tem como objetivo ajudar usuários e empresas a identificar **gastos anormais ou suspeitos**.  
+Ele funciona em 3 partes principais:
 
-  - Exibe métricas de gastos, gráficos e alertas de anomalias.
-  - Visualização de histórico e despesas recentes.
-  - Design moderno com sidebar escura e interface clara e fluida.
+1. **🧠 Backend (API - FastAPI)**  
+   Responsável por receber eventos de gastos, processá-los, calcular _scores de anomalia_ e armazenar os resultados.
 
-- ⚙️ **API (FastAPI)**
+2. **📊 Dashboard (Streamlit)**  
+   Interface interativa que exibe métricas, gráficos, histórico e anomalias detectadas em tempo real.
 
-  - Recebe e armazena eventos de despesas.
-  - Identifica anomalias (valores fora do padrão).
-  - Pode funcionar com ou sem autenticação JWT.
-
-- 🤖 **Simulador de eventos (Python)**
-  - Envia automaticamente gastos aleatórios para a API.
-  - Permite testar o sistema de detecção de anomalias em tempo real.
+3. **💸 Envio de Despesas (Streamlit App)**  
+   Aplicativo auxiliar que permite inserir manualmente novos gastos (ou simular dados) para alimentar o sistema.
 
 ---
 
 ## 🧩 Estrutura do Projeto
 
-vigilante-de-gastos/
+vigilante_streaming/
 │
-├── backend/
-│ ├── main.py # API FastAPI (eventos e autenticação)
-│ ├── database.db # Banco SQLite (gerado automaticamente)
-│ ├── requirements.txt # Dependências do backend
+├── app.py # Servidor FastAPI principal (API)
+├── dashboard.py # Dashboard em Streamlit
+├── streamlit_app.py # Envio manual de gastos
 │
-├── dashboard/
-│ ├── app.py # Interface Streamlit (frontend)
-│ ├── README.md # Este arquivo
+├── models/ # (Opcional) Modelos ML e funções de predição
+├── data/ # Dados salvos (sqlite ou csv)
 │
-├── simulator/
-│ └── send_events.py # Script para envio automático de eventos
-│
-└── README.md
+├── README.md # Este arquivo
+└── requirements.txt # Dependências do projeto
 
-## 🏗️ Arquitetura
+yaml
+Copiar código
 
-```text
-[Simulador de Eventos] → [API FastAPI] → [Banco de Dados SQLite] → [Dashboard Streamlit]
+---
 
-⚙️ Instalação
-1️⃣ Clone o repositório
-git clone https://github.com/seuusuario/vigilante-de-gastos.git
-cd vigilante-de-gastos
+## ⚙️ Instalação
 
-2️⃣ Crie e ative um ambiente virtual
+### 1️⃣ Clonar o repositório
+
+```bash
+git clone https://github.com/seuusuario/vigilante_streaming.git
+cd vigilante_streaming
+2️⃣ Criar ambiente virtual (opcional, mas recomendado)
+bash
+Copiar código
 python -m venv venv
-source venv/bin/activate   # Linux / Mac
-venv\Scripts\activate      # Windows
+Ativar:
 
-3️⃣ Instale as dependências
-Backend:
-cd backend
-pip install -r requirements.txt
+Windows (PowerShell ou Git Bash):
 
-Dashboard:
-cd ../dashboard
-pip install streamlit pandas requests
+bash
+Copiar código
+venv\Scripts\activate
+Linux / macOS:
 
-Simulador:
-cd ../simulator
-pip install requests
+bash
+Copiar código
+source venv/bin/activate
+3️⃣ Instalar dependências
+bash
+Copiar código
+pip install fastapi uvicorn streamlit pandas scikit-learn passlib bcrypt pyjwt
+🧠 Como Executar o Projeto
+O sistema é composto por três componentes que devem ser executados em terminais separados. Siga a ordem abaixo para ver o streaming em ação.
 
-▶️ Execução
-🧠 1. Inicie a API FastAPI
-cd backend
-uvicorn main:app --reload
+1️⃣ Rodar o Servidor FastAPI (API)
+Este é o backend responsável pela lógica e detecção de anomalias.
 
+Bash
+uvicorn app:app --reload
+💡 Servidor rodando em: http://127.0.0.1:8000
 
-API rodará em:
-👉 http://127.0.0.1:8000
+2️⃣ Rodar a Simulação de Eventos (demo.py)
+Em um segundo terminal, execute este script. Ele começará a enviar eventos de gastos simulados para a API a cada 2 segundos, alimentando o sistema.
 
-💸 2. Execute o simulador de eventos
-cd simulator
-python send_events.py
+Bash
+python demo.py
 
+3️⃣ Rodar o Dashboard (Painel Principal)
+Em um terceiro terminal, inicie o painel de visualização.
 
-O script começará a enviar despesas automaticamente para a API.
+Bash
+streamlit run dashboard.py
+📊 Acesse o Dashboard em: http://localhost:8501
 
-📊 3. Abra o dashboard Streamlit
-cd dashboard
-streamlit run app.py
+💸 (Opcional) App de Envio Manual
+Se quiser enviar despesas manualmente, use o streamlit_app.py em um quarto terminal.
+
+Bash
+streamlit run streamlit_app.py
+
+📈 Funcionalidades Principais
+✅ Detecção de anomalias em gastos usando aprendizado de máquina
+✅ Painel interativo com métricas, gráficos e histórico
+✅ Autenticação de usuários (opcional, via JWT)
+✅ Registro manual e automático de despesas
+✅ Visualização de últimas anomalias detectadas
+✅ Interface moderna e responsiva
+
+📦 Tecnologias Utilizadas
+Tecnologia	Função
+🧠 FastAPI	Backend / API
+📊 Streamlit	Dashboard e app de envio
+📈 Pandas	Manipulação de dados
+🤖 Scikit-Learn	Modelo de detecção de anomalias
+🔐 Passlib + JWT	Autenticação (opcional)
+
+🧰 Endpoints da API (principais)
+Método	Rota	Descrição
+POST	/event	Envia um novo evento de gasto
+GET	/events	Retorna todos os eventos registrados
+POST	/token	Gera token de autenticação (opcional)
+
 ```
