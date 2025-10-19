@@ -1,0 +1,11 @@
+fastapi[standard]
+uvicorn
+pydantic
+passlib[bcrypt]
+scikit-learn
+numpy
+pandas
+requests
+streamlit
+jwt
+python-multipart
